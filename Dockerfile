@@ -38,7 +38,16 @@ RUN apt-get install -y \
     python \
     python-pip \
     python-virtualenv \
-    vim
+    vim \
+    apt-transport-https ca-certificates
+    
+    
+RUN pip install boto3==1.3.0
+          
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install nodejs yarn -y
 
 RUN adduser --disabled-login --gecos '' aws
 WORKDIR /home/aws
@@ -48,7 +57,7 @@ USER aws
 RUN \
     mkdir aws && \
     virtualenv aws/env && \
-    ./aws/env/bin/pip install awscli && \
+    ./aws/env/bin/ install awscli && \
     echo 'source $HOME/aws/env/bin/activate' >> .bashrc && \
     echo 'complete -C aws_completer aws' >> .bashrc
 
